@@ -87,7 +87,7 @@ class _MobileBodyState extends State<MobileBody> {
                           child: TaskContainer(
                             taskName: context.read<HomeCubit>().tasks[index].taskName!,
                             dueDate:
-                            "${DateFormat("EEE").format(DateFormat("dd-MM-yyyy").parse(context.read<HomeCubit>().allTasks[index].dueDate!))} ${context.read<HomeCubit>().allTasks[index].dueDate!}",
+                            "${DateFormat("EEE").format(DateFormat("yyyy-MM-dd").parse(context.read<HomeCubit>().allTasks[index].dueDate!))} ${context.read<HomeCubit>().allTasks[index].dueDate!}",
                             hight: 100.h,
                             width: 323.w,
                             done: context.read<HomeCubit>().tasks[index].done!,

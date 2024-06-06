@@ -38,8 +38,8 @@ class HomeCubit extends Cubit<HomeStates> {
   addToCalendar(){
     final Event event = Event(
         title: task!.taskName!,
-        startDate: DateFormat("dd-MM-yyyy").parse(task!.dueDate!),
-        endDate: DateFormat("dd-MM-yyyy").parse(task!.dueDate!));
+        startDate: DateFormat("yyyy-MM-dd").parse(task!.dueDate!),
+        endDate: DateFormat("yyyy-MM-dd").parse(task!.dueDate!));
     Add2Calendar.addEvent2Cal(event);
   }
 
@@ -140,9 +140,9 @@ class HomeCubit extends Cubit<HomeStates> {
       }).catchError((error) {});
     } else {
       HiveBox.putUpdateTask(TaskModelHive(
-          taskName: task!.taskName,
-          dueDate: task!.dueDate,
-          done: task!.done,
+          taskName: taskNameController.text,
+          dueDate: dateController.text,
+          done: done ?? task!.done,
           taskId: task!.taskId));
     }
   }
@@ -171,12 +171,6 @@ class HomeCubit extends Cubit<HomeStates> {
       db.collection("tasks").doc().set(taskModel.toJson()).then((value) {
         addTasksOffline.remove(element);
         HiveBox.removeAddTask(element.taskName);
-
-        final Event event = Event(
-            title: element.taskName!,
-            startDate: DateFormat("dd-MM-yyyy").parse(element.dueDate!),
-            endDate: DateFormat("dd-MM-yyyy").parse(element.dueDate!));
-        Add2Calendar.addEvent2Cal(event);
       }).catchError((error) {
         print(error);
       });
