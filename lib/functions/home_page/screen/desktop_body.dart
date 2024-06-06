@@ -46,18 +46,27 @@ class _DesktopBodyState extends State<DesktopBody> {
                           Row(
                             children: [
                               StatusComponent(
+                                onTap: (){
+                                  context.read<HomeCubit>().onAllFilterPressed();
+                                },
                                 height: 21.h,
                                 width: 59.w,
                                 text: "All",
                                 isActive: context.read<HomeCubit>().all,
                               ),
                               StatusComponent(
+                                onTap: (){
+                                  context.read<HomeCubit>().onNotDoneFilterPressed();
+                                },
                                 height: 21.h,
                                 width: 59.w,
                                 text: "Not Done",
                                 isActive: context.read<HomeCubit>().notDoneFilter,
                               ),
                               StatusComponent(
+                                onTap: (){
+                                  context.read<HomeCubit>().onDoneFilterPressed();
+                                },
                                 height: 21.h,
                                 width: 59.w,
                                 text: "Done",
@@ -83,7 +92,9 @@ class _DesktopBodyState extends State<DesktopBody> {
                                               color: Color(0xFF4ECB71)
                                                   .withOpacity(0.25),
                                               width: 4)),
-                                      content: TaskDialog(),
+                                      content: Form(
+                                          key: context.read<HomeCubit>().formKey,
+                                          child: TaskDialog()),
                                     ));
                           },
                           icon: Image.asset(
@@ -97,7 +108,7 @@ class _DesktopBodyState extends State<DesktopBody> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: GridView.builder(
-                        itemCount: context.read<HomeCubit>().allTasks.length,
+                        itemCount: context.read<HomeCubit>().tasks.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: EdgeInsets.symmetric(horizontal: 15.w),
@@ -114,15 +125,15 @@ class _DesktopBodyState extends State<DesktopBody> {
                               child: TaskContainer(
                                 taskName: context
                                     .read<HomeCubit>()
-                                    .allTasks[index]
+                                    .tasks[index]
                                     .taskName!,
                                 dueDate:
-                                    "${DateFormat("EEE").format(DateFormat("dd-MM-yyyy").parse(context.read<HomeCubit>().allTasks[index].dueDate!))} ${context.read<HomeCubit>().allTasks[index].dueDate!}",
+                                    "${DateFormat("EEE").format(DateFormat("dd-MM-yyyy").parse(context.read<HomeCubit>().tasks[index].dueDate!))} ${context.read<HomeCubit>().tasks[index].dueDate!}",
                                 hight: 79.h,
                                 width: 323.w,
                                 done: context
                                     .read<HomeCubit>()
-                                    .allTasks[index]
+                                    .tasks[index]
                                     .done!,
                               ),
                             ),

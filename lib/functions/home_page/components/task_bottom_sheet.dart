@@ -49,12 +49,14 @@ class TaskButtomSheet extends StatelessWidget {
                     SizedBox(height: 14.h,),
                     CustomTextField(
                       hint: "Task Title",
+                      validator: (_) => context.read<HomeCubit>().taskNameValidator(),
                       controller: context.read<HomeCubit>().taskNameController,
                     ),
                     SizedBox(height: 7.h,),
                     CustomTextField(
                       hint: "Due Date",
                       readOnly: true,
+                      validator: (_) => context.read<HomeCubit>().dateValidator(),
                       controller: context.read<HomeCubit>().dateController,
                       onTap: () async {
                         context.read<HomeCubit>().date = await showDatePicker(context: context, firstDate: DateTime.now(), lastDate: DateTime(2050),
@@ -149,8 +151,7 @@ class TaskButtomSheet extends StatelessWidget {
                               Navigator.pop(context);
                             } :
                                 () {
-                             context.read<HomeCubit>().createTask();
-                              Navigator.pop(context);
+                             context.read<HomeCubit>().createTask(context);
                             },
                             style: ButtonStyle(
                                 foregroundColor:

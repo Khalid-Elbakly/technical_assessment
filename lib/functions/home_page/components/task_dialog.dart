@@ -49,6 +49,7 @@ class TaskDialog extends StatelessWidget {
               CustomTextField(
                 hint: "Task Title",
                 controller: context.read<HomeCubit>().taskNameController,
+                validator: (_) => context.read<HomeCubit>().taskNameValidator(),
               ),
               SizedBox(
                 height: 7.h,
@@ -56,6 +57,7 @@ class TaskDialog extends StatelessWidget {
               CustomTextField(
                   hint: "Due Date",
                   readOnly: true,
+                  validator: (_) => context.read<HomeCubit>().dateValidator(),
                   controller: context.read<HomeCubit>().dateController,
                   onTap: () async {
                     context.read<HomeCubit>().date = await showDatePicker(
@@ -134,8 +136,7 @@ class TaskDialog extends StatelessWidget {
                           Navigator.pop(context);
                         }
                       : () {
-                          context.read<HomeCubit>().createTask();
-                          Navigator.pop(context);
+                          context.read<HomeCubit>().createTask(context);
                         },
                   style: ButtonStyle(
                       foregroundColor: WidgetStateProperty.all(Colors.white),

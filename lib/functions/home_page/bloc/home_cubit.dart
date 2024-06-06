@@ -17,32 +17,6 @@ class HomeCubit extends Cubit<HomeStates> {
 
   var db = FirebaseFirestore.instance;
 
-  Future<void> createTask() async {
-    if (await NetworkService.isConnected == true) {
-    TaskModel taskModel = TaskModel(
-        taskName: taskNameController.text,
-        dueDate: dateController.text,
-        done: false);
-
-    db.collection("tasks").doc().set(taskModel.toJson()).then((value) {
-      getTasks();
-    }).catchError((error) {
-      print(error);
-    });
-  }
-  else{
-    HiveBox.putAddTask(TaskModelHive(taskName: taskNameController.text, dueDate: dateController.text, done: false,));
-    }
-  }
-
-  addToCalendar(){
-    final Event event = Event(
-        title: task!.taskName!,
-        startDate: DateFormat("yyyy-MM-dd").parse(task!.dueDate!),
-        endDate: DateFormat("yyyy-MM-dd").parse(task!.dueDate!));
-    Add2Calendar.addEvent2Cal(event);
-  }
-
   List<TaskModel> allTasks = [];
   List<TaskModel> doneTasks = [];
   List<TaskModel> notDoneTasks = [];
@@ -93,6 +67,58 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(HomeInitialState());
   }
 
+  taskNameValidator(){
+    if(taskNameController.text.isNotEmpty){
+      return null;
+    }
+    else{
+      return "Please Enter Task Name";
+    }
+  }
+
+  dateValidator(){
+    if(dateController.text.isNotEmpty){
+      return null;
+    }
+    else{
+      return "Please Choose Task date";
+    }
+  }
+
+
+  Future<void> createTask(BuildContext context) async {
+    if (formKey.currentState!.validate()){
+      Navigator.pop(context);
+      if (await NetworkService.isConnected == true) {
+        TaskModel taskModel = TaskModel(
+            taskName: taskNameController.text,
+            dueDate: dateController.text,
+            done: false);
+
+        db.collection("tasks").doc().set(taskModel.toJson()).then((value) {
+          getTasks();
+        }).catchError((error) {
+          print(error);
+        });
+      }
+      else {
+        HiveBox.putAddTask(TaskModelHive(taskName: taskNameController.text,
+          dueDate: dateController.text,
+          done: false,));
+      }}
+  }
+
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+
+  addToCalendar(){
+    final Event event = Event(
+        title: task!.taskName!,
+        startDate: DateFormat("yyyy-MM-dd").parse(task!.dueDate!),
+        endDate: DateFormat("yyyy-MM-dd").parse(task!.dueDate!));
+    Add2Calendar.addEvent2Cal(event);
+  }
+
   getTasks() {
     // emit(HomeLoadingState());
     allTasks = [];
@@ -125,6 +151,7 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
   updateTask({bool? done}) async {
+    if(formKey.currentState!.validate()){
     emit(HomeLoadingState());
     if (await NetworkService.isConnected == true) {
       db
@@ -144,7 +171,7 @@ class HomeCubit extends Cubit<HomeStates> {
           dueDate: dateController.text,
           done: done ?? task!.done,
           taskId: task!.taskId));
-    }
+    }}
   }
 
   deleteTask() async {

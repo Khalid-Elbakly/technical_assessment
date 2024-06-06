@@ -6,7 +6,8 @@ class CustomTextField extends StatelessWidget {
   final void Function()? onTap;
   final TextEditingController? controller;
   final bool readOnly;
-  const CustomTextField({super.key, required this.hint,this.onTap, this.controller, this.readOnly = false});
+  final String? Function(String?)? validator;
+  const CustomTextField({super.key, required this.hint,this.onTap, this.controller, this.readOnly = false, this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class CustomTextField extends StatelessWidget {
       child: TextFormField(
         style: TextStyle(color: Colors.black.withOpacity(0.5)),
         onTap: onTap,
+        validator: validator,
         controller: controller,
         readOnly: readOnly,
         decoration: InputDecoration(
