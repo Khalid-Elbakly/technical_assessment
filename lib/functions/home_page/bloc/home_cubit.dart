@@ -151,7 +151,6 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
   updateTask({bool? done}) async {
-    if(formKey.currentState!.validate()){
     emit(HomeLoadingState());
     if (await NetworkService.isConnected == true) {
       db
@@ -172,7 +171,6 @@ class HomeCubit extends Cubit<HomeStates> {
           done: done ?? task!.done,
           taskId: task!.taskId));
     }}
-  }
 
   deleteTask() async {
     if (await NetworkService.isConnected == true) {
